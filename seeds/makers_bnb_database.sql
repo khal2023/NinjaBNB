@@ -15,7 +15,7 @@ CREATE TABLE properties (
     property_name VARCHAR(255),
     street_address VARCHAR(255),
     city VARCHAR(255),
-    property_description VARCHAR(255),
+    property_description TEXT,
     price_per_night INT,
     person_owner_id INT,
     FOREIGN KEY (person_owner_id) REFERENCES people(id)

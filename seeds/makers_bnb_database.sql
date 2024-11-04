@@ -44,3 +44,4 @@ CREATE TABLE bookings (
     FOREIGN KEY (property_id) REFERENCES properties(id),
     FOREIGN KEY (person_booker_id) REFERENCES people(id)
 );
+

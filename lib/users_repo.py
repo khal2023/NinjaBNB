@@ -1,13 +1,13 @@
-from lib.person import Person
+from lib.users import Users
 
-class PersonRepo:
+class UsersRepo:
     def __init__(self, connection):
         self._connection = connection
 
-    def find(self, person_id):
-        rows = self._connection.execute('SELECT * FROM people WHERE id = %s', [person_id])
+    def find(self, users_id):
+        rows = self._connection.execute('SELECT * FROM people WHERE id = %s', [users_id])
         row = rows[0]
-        return Person(row["id"], row["first_name"], row["surname"], row["username"], None)
+        return Users(row["id"], row["first_name"], row["surname"], row["username"], None)
     
     def username_in_db(self, username):
         rows = self._connection.execute('SELECT username FROM people WHERE username = %s', [username])

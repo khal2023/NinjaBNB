@@ -44,4 +44,3 @@ CREATE TABLE bookings (
     FOREIGN KEY (property_id) REFERENCES properties(id),
     FOREIGN KEY (guest_id) REFERENCES users(id)
 );
-

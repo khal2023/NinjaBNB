@@ -9,7 +9,7 @@ def test_property_construction():
     assert property.city == "London"
     assert property.property_description == "property description"
     assert property.price_per_night == 150
-    assert property.person_owner_id == 1
+    assert property.host_id == 1
     
 def test_property_are_equal():
     property1 = Property(2, "testname", "street_address", "London", "property description", 150, 1)
@@ -20,4 +20,4 @@ def test_property_are_equal():
 def test_property_format_nicely():
     property = Property(2, "testname", "street_address", "London", "property description", 150, 1)
 
-    assert str(property) ==  'Property(2, testname, street_address, London, property description, 150, 1)'
+    assert str(property) == 'Property(2, testname, street_address, London, property description, 150, 1)'

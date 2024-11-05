@@ -26,7 +26,7 @@ class PropertyRepo:
         
         self._connection.execute(
             'INSERT INTO properties (property_name, street_address, city, property_description, price_per_night, host_id) VALUES (%s, %s, %s, %s, %s, %s)', 
-            [properties.property_name, properties.street_address, properties.city, properties.property_description, properties.price_per_night, properties.host_id]
+            [properties.name, properties.street_address, properties.city, properties.property_description, properties.price_per_night, properties.host_id]
         )
         return None
     

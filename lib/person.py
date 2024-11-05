@@ -1,22 +1,18 @@
 class Person:
-    def __init__(self, person_id, first_name, surname, username, password):
+    def __init__(self, person_id, first_name, surname, username, password=None):
         self.person_id = person_id
-        if isinstance(first_name, str):
-            self.first_name = first_name
+        self.first_name = self._validate_string(first_name)
+        self.surname = self._validate_string(surname)
+        self.username = self._validate_string(username)
+        if password is not None:
+            self.password = self._validate_string(password)
         else:
-            raise Exception("String inputs only")
-        if isinstance(surname, str):
-            self.surname = surname
-        else:
-            raise Exception("String inputs only")
-        if isinstance(username, str):
-            self.username = username
-        else:
-            raise Exception("String inputs only")
-        if isinstance(password, str):
-            self.password = password
-        else:
-            raise Exception("String inputs only")
+            self.password = None
+    
+    def _validate_string(self, value):
+        if not isinstance(value, str):
+            raise Exception(f"String inputs only")
+        return value
         
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

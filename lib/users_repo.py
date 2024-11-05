@@ -21,4 +21,8 @@ class UsersRepo:
             self._connection.execute('INSERT INTO users (first_name, surname, username, user_password) VALUES (%s, %s, %s, %s)', [
                 first_name, surname, username, password])
     
+    def validate_user(self, username, password):
+        valid_users = self._connection.execute('SELECT * FROM users WHERE username = %s AND user_password = %s', [username, password])
+        return len(valid_users) > 0
+    
 

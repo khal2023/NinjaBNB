@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS people;
-DROP TABLE IF EXISTS properties;
 DROP TABLE IF EXISTS bookings;
+DROP TABLE IF EXISTS properties;
+DROP TABLE IF EXISTS people;
 
 CREATE TABLE people (
     id SERIAL PRIMARY KEY,
@@ -10,11 +10,11 @@ CREATE TABLE people (
     user_password VARCHAR(255)
 );
 
-INSERT INTO properties (first_name, surname, username, user_password) VALUES ('Khalid', 'Ham', 'KHam', 'Python24');
-INSERT INTO properties (first_name, surname, username, user_password) VALUES ('Bakar', 'Shariffali', 'BShariffali', 'CSharp60');
-INSERT INTO properties (first_name, surname, username, user_password) VALUES ('Lou', 'Paine', 'LPaine', 'Fortran90');
-INSERT INTO properties (first_name, surname, username, user_password) VALUES ('Alberto', 'Tobarra', 'ATobarra', 'Java54');
-INSERT INTO properties (first_name, surname, username, user_password) VALUES ('John', 'O Neill', 'JONeill', 'HTML30');
+INSERT INTO people (first_name, surname, username, user_password) VALUES ('Khalid', 'Ham', 'KHam', 'Python24');
+INSERT INTO people (first_name, surname, username, user_password) VALUES ('Bakar', 'Shariffali', 'BShariffali', 'CSharp60');
+INSERT INTO people (first_name, surname, username, user_password) VALUES ('Lou', 'Paine', 'LPaine', 'Fortran90');
+INSERT INTO people (first_name, surname, username, user_password) VALUES ('Alberto', 'Tobarra', 'ATobarra', 'Java54');
+INSERT INTO people (first_name, surname, username, user_password) VALUES ('John', 'O Neill', 'JONeill', 'HTML30');
 
 
 CREATE TABLE properties (

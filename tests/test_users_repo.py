@@ -27,6 +27,10 @@ def test_create_refuses_incorrect_password(db_connection):
     repo.create("Hunor", "Tamas", "C0deMaster", "Apple!")
     assert repo.username_in_db("C0deMaster") == False
 
+def test_validate_user(db_connection):
+    db_connection.seed("seeds/makers_bnb_database.sql")
+    repo = UsersRepo(db_connection)
+    assert repo.validate_user("KHam", "Python24") == True
 
 
 # remove users from db based on selection criteria 

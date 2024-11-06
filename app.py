@@ -40,27 +40,31 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        if valid_users(username, password):
-            return redirect(url_for('Booking'))
-        else:
-            return "Invalid username or password"
+        # if valid_users(username, password):
+        #     return redirect(url_for('Booking'))
+        # else:
+        #     return "Invalid username or password"
     
     return render_template('Login.html')
 
 
 # Route that registers user and redirects them to login page
-@app.route("/register", methods=['POST'])
+@app.route("/users", methods=['POST'])
 def register_new_user():
-    if request.method == 'POST':
-        first_name = request.form [first_name]
-        surname = request.form [surname]
-        username = request.form [username]
-        password = request.form [password]
+    first_name = request.form['first_name']
+    surname = request.form['surname']
+    username = request.form['username']
+    password = request.form['user_password']
+    connection = get_flask_database_connection(app)
+    usersrepo = UsersRepo(connection)
+    usersrepo.create(first_name, surname, username, password)
+    return "user added"
+        
 
-        if valid_users(first_name, surname, username, password):
-            return redirect(url_for('index'))
-        else:
-            return "Invalid username or password"
+        # if valid_users(first_name, surname, username, password):
+        #     return redirect(url_for('index'))
+        # else:
+        # return "Invalid username or password"
 
 
  

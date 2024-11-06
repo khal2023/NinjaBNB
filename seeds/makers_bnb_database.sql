@@ -38,9 +38,10 @@ INSERT INTO properties (property_name, street_address, city, property_descriptio
 CREATE TABLE bookings (
     id SERIAL PRIMARY KEY,
     property_id INT,
-    guest_id INT,
-    booking_start_date DATE,
-    booking_end_date DATE,
+    user_id INT,
+    b_start_date DATE,
+    b_end_date DATE,
+    b_status VARCHAR(255),
     FOREIGN KEY (property_id) REFERENCES properties(id),
-    FOREIGN KEY (guest_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );

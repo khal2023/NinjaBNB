@@ -69,10 +69,19 @@ def register_new_user():
 
  
 
-# # Route to list all properties
-# @app.route('/all', methods = ['GET'])
-# def get_all_properties_from_users():
-#     return redirect(url_for(''))
+# Route to list all properties
+@app.route('/properties', methods = ['GET'])
+def http_get_existing_properties():
+    connection = get_flask_database_connection(app)
+    propertyrepo = PropertyRepo(connection)
+    properties = propertyrepo.all()
+    properties_list = []
+    for property in properties:
+        properties_list.append(property.name)
+    return (", ").join(properties_list)
+
+
+
     
 # # Route to find a property
 # @app.route('/find', methods = ['GET'])

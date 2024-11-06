@@ -25,4 +25,12 @@ class UsersRepo:
         valid_users = self._connection.execute('SELECT * FROM users WHERE username = %s AND user_password = %s', [username, password])
         return len(valid_users) > 0
     
+    def list_all_users(self):
+        rows = self._connection.execute('SELECT * FROM users')
+        all_users = []
+        for row in rows:
+            user = (Users(row["id"], row["first_name"], row["surname"], row["username"], None))
+            all_users.append(user)
+        return all_users
+    
 

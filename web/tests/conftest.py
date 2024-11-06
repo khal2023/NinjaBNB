@@ -2,7 +2,7 @@ import pytest, sys, random, pytest, os
 from pathlib import Path
 from xprocess import ProcessStarter
 from lib.database_connection import DatabaseConnection
-from web.app import app
+from app import app
 
 # This is a Pytest fixture.
 # It creates an object that we can use in our tests.

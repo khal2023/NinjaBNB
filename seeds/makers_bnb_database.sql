@@ -45,3 +45,7 @@ CREATE TABLE bookings (
     FOREIGN KEY (property_id) REFERENCES properties(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+INSERT INTO bookings (property_id, user_id, b_start_date, b_end_date, b_status) VALUES (1, 1, '2024-11-05', '2024-11-15', 'Unconfirmed');
+INSERT INTO bookings (property_id, user_id, b_start_date, b_end_date, b_status) VALUES (2, 1, '2024-11-05', '2024-11-15', 'Confirmed');
+INSERT INTO bookings (property_id, user_id, b_start_date, b_end_date, b_status) VALUES (1, 1, '2024-11-05', '2024-11-15', 'Confirmed');

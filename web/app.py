@@ -8,24 +8,24 @@ from lib.users_repo import UsersRepo
 
 # Function that constructs an URL for the database
 
-def get_database_url():
-    if os.environ.get("APP_ENV") == "PRODUCTION":
-        password = os.environ.get("POSTGRES_PASSWORD")
-        hostname = os.environ.get("POSTGRES_HOSTNAME")
-        return f"postgres://postgres:{password}@{hostname}:5432/postgres"
-    else:
-        return "postgres://localhost:5432/postgres"
+# def get_database_url():
+#     if os.environ.get("APP_ENV") == "PRODUCTION":
+#         password = os.environ.get("POSTGRES_PASSWORD")
+#         hostname = os.environ.get("POSTGRES_HOSTNAME")
+#         return f"postgres://postgres:{password}@{hostname}:5432/postgres"
+#     else:
+#         return "postgres://localhost:5432/postgres"
 
-# Function that sets up the database with the right table
+# # Function that sets up the database with the right table
 
-def setup_database(url):
-    connection = psycopg.connect(url)
-    cursor = connection.cursor()
-    cursor.execute("CREATE TABLE IF NOT EXISTS messages (message TEXT);")
-    connection.commit()
+# def setup_database(url):
+#     connection = psycopg.connect(url)
+#     cursor = connection.cursor()
+#     cursor.execute("CREATE TABLE IF NOT EXISTS messages (message TEXT);")
+#     connection.commit()
     
-POSTGRES_URL = get_database_url()
-setup_database(POSTGRES_URL)
+# POSTGRES_URL = get_database_url()
+# setup_database(POSTGRES_URL)
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -121,13 +121,13 @@ def register_new_user():
 # if started in test mode.
 if __name__ == '__main__':
     
-    if os.environ.get("APP_ENV") == "PRODUCTION":
-        app.run(port=5000, host='0.0.0.0')
+    # if os.environ.get("APP_ENV") == "PRODUCTION":
+    #     app.run(port=5000, host='0.0.0.0')
     
-    else:
-        app.run(
-            debug=True,
-            port=int(os.environ.get('PORT', 5001)),
-            host="0.0.0.0"
-        )
+    # else:
+    app.run(
+        debug=True,
+        port=int(os.environ.get('PORT', 5001)),
+        host="0.0.0.0"
+    )
     

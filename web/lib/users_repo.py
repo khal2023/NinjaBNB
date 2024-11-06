@@ -4,6 +4,14 @@ class UsersRepo:
     def __init__(self, connection):
         self._connection = connection
 
+    def list_all_users(self):
+        rows = self._connection.execute('SELECT * FROM users')
+        all_users = []
+        for row in rows:
+            user = (Users(row["id"], row["first_name"], row["surname"], row["username"], None))
+            all_users.append(user)
+        return all_users
+
     def find(self, users_id):
         rows = self._connection.execute('SELECT * FROM users WHERE id = %s', [users_id])
         row = rows[0]

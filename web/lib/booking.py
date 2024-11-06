@@ -8,7 +8,17 @@ class Booking:
         self.status = status
     
     def __eq__(self, other):
-        return self.__dict__ == other.__dict__
+        if not isinstance(other, Booking):
+            return False
+        
+        return (
+            self.id == other.id and
+            self.property_id == other.property_id and
+            self.user_id == other.user_id and
+            str(self.start_date) == str(other.start_date) and
+            str(self.end_date) == str(other.end_date) and
+            self.status == other.status
+        )
 
     def __repr__(self):
         return f"Booking({self.id}, {self.property_id}, {self.user_id}, {self.start_date}, {self.end_date}, {self.status})"

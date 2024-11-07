@@ -1,4 +1,5 @@
 from lib.booking import Booking
+from datetime import datetime, timedelta
 
 class BookingRepo:
     def __init__(self, connection):
@@ -22,7 +23,10 @@ class BookingRepo:
             property_rows[0]["id"], user_rows[0]["id"], start_date, end_date])
     
     def get_price_of_booking(self, property_name, start_date, end_date):
-        pass
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+        prices = self._connection.execute('SELECT price_per_night FROM properties WHERE property_name = %s', [property_name])
+        return (end - start).days * prices[0]["price_per_night"]
         
 
 # VALIDITY CHECKS

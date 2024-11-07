@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Calendar</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    .calendar-day.selected {
+      background-color: #3b82f6;
+      color: white;
+    }
+    .calendar-day.today {
+      border: 2px solid purple;
+    }
+    .calendar-day.unavailable {
+      background-color: #e53e3e;
+      color: white;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+    <style>
+        body {
+            text-align: center; background-color: lightgray;
+        }
+    </style>
+  <div class="flex justify-center items-center h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
+      <h2 class="text-2xl font-bold mb-4">Select your dates to book your stay</h2>
+      <div class="calendar">
+        <div class="flex justify-between mb-2">
+          <button id="prev-month" class="text-gray-500 hover:text-gray-700">&lt;</button>
+          <span id="current-month"></span>
+          <button id="next-month" class="text-gray-500 hover:text-gray-700">&gt;</button>
+        </div>
+        <div class="grid grid-cols-7 gap-1">
+          <div class="text-center font-bold text-gray-500">Sun</div>
+          <div class="text-center font-bold text-gray-500">Mon</div>
+          <div class="text-center font-bold text-gray-500">Tue</div>
+          <div class="text-center font-bold text-gray-500">Wed</div>
+          <div class="text-center font-bold text-gray-500">Thu</div>
+          <div class="text-center font-bold text-gray-500">Fri</div>
+          <div class="text-center font-bold text-gray-500">Sat</div>
+        </div>
+        <div id="calendar-days" class="grid grid-cols-7 gap-1 mt-2"></div>
+      </div>
+      <div class="mt-4 flex justify-between">
+        <button id="clear-selection" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Clear Selection</button>
+        <button id="check-availability" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">Check Availability</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const currentMonthElement = document.getElementById('current-month');
+    const calendarDaysElement = document.getElementById('calendar-days');
+    const prevMonthButton = document.getElementById('prev-month');
+    const nextMonthButton = document.getElementById('next-month');
+    const clearSelectionButton = document.getElementById('clear-selection');
+    const checkAvailabilityButton = document.getElementById('check-availability');
+
+    // Replace this with your actual available dates
+    const availableDates = [
+      new Date(2023, 4, 1),
+      new Date(2023, 4, 5),
+      new Date(2023, 4, 10),
+      new Date(2023, 4, 15),
+      new Date(2023, 4, 20),
+      new Date(2023, 4, 25),
+      new Date(2023, 5, 1),
+      new Date(2023, 5, 5),
+      new Date(2023, 5, 10)
+    ];
+
+    let currentDate = new Date();
+    let selectedDates = [];
+
+    function renderCalendar() {
+      const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay();
+      const lastDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+
+      currentMonthElement.textContent = currentDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+      calendarDaysElement.innerHTML = '';
+
+      for (let i = 0; i < firstDay; i++) {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('calendar-day', 'text-gray-300');
+        calendarDaysElement.appendChild(dayElement);
+      }
+
+      for (let i = 1; i <= lastDate; i++) {
+        const dayElement = document.createElement('div');
+        dayElement.classList.add('calendar-day', 'cursor-pointer', 'hover:bg-gray-100');
+        dayElement.textContent = i;
+
+        if (selectedDates.some(date => date.getDate() === i && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear())) {
+          dayElement.classList.add('selected');
+        }
+
+        if (currentDate.getDate() === i && currentDate.getMonth() === currentDate.getMonth() && currentDate.getFullYear() === currentDate.getFullYear()) {
+          dayElement.classList.add('today');
+        }
+
+        if (!availableDates.some(date => date.getDate() === i && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear())) {
+          dayElement.classList.add('unavailable');
+        }
+
+        dayElement.addEventListener('click', () => {
+          if (!dayElement.classList.contains('unavailable')) {
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+            const index = selectedDates.findIndex(date => date.getTime() === selectedDate.getTime());
+            if (index === -1) {
+              selectedDates.push(selectedDate);
+            } else {
+              selectedDates.splice(index, 1);
+            }
+            renderCalendar();
+          }
+        });
+
+        calendarDaysElement.appendChild(dayElement);
+      }
+    }
+
+    prevMonthButton.addEventListener('click', () => {
+      currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+      renderCalendar();
+    });
+
+    nextMonthButton.addEventListener('click', () => {
+      currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
+    clearSelectionButton.addEventListener('click', () => {
+      selectedDates = [];
+      renderCalendar();
+    });
+
+    checkAvailabilityButton.addEventListener('click', () => {
+      // Replace this with your own availability check logic
+      const unavailableDates = selectedDates.filter(date => !availableDates.some(availableDate =>
+        availableDate.getDate() === date.getDate() &&
+        availableDate.getMonth() === date.getMonth() &&
+        availableDate.getFullYear() === date.getFullYear()
+      ));
+
+      if (unavailableDates.length > 0) {
+        alert(`The following dates are unavailable: ${unavailableDates.map(date => date.toLocaleDateString()).join(', ')}`);
+      } else {
+        alert('All selected dates are available!');
+      }
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>

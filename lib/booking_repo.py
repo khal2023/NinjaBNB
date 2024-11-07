@@ -60,4 +60,6 @@ class BookingRepo:
         return end < start
     
     def start_date_before_today(start_date):
-        pass
+        start = datetime.strptime(start_date, "%Y-%m-%d").date()
+        return datetime.today().date() >= start
+        

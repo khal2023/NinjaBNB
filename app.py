@@ -3,6 +3,7 @@ from flask import Flask, request, render_template, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.property_repo import PropertyRepo
 from lib.users_repo import UsersRepo
+from lib.property import Property
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -36,9 +37,8 @@ def booking():
 # Route that log in user and redirect them to login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    username = request.form['username']
+    password = request.form['password']
         
         # if valid_users(username, password):
         #     return redirect(url_for('Booking'))
@@ -67,8 +67,6 @@ def register_new_user():
         # return "Invalid username or password"
 
 
- 
-
 # Route to list all properties
 @app.route('/properties', methods = ['GET'])
 def http_get_existing_properties():
@@ -80,8 +78,34 @@ def http_get_existing_properties():
         properties_list.append(property.name)
     return (", ").join(properties_list)
 
+@app.route('/properties/<int:id>', methods = ['GET'])
+def http_get_existing_property_from_id(id):
+    connection = get_flask_database_connection(app)
+    propertyrepo = PropertyRepo(connection)
+    return str(propertyrepo.find(id))
+    return properties.name
 
-
+@app.route('/properties', methods = ['POST'])
+def http_post_property():
+    
+    property_name = request.form['property_name']
+    street_address = request.form['street_address']
+    city = request.form['city']
+    property_description = request.form['property_description']
+    price_per_night = request.form['price_per_night']
+    host_id = request.form['host_id']
+    
+    property = Property(None, property_name, street_address, city, property_description, price_per_night, host_id)
+    
+    connection = get_flask_database_connection(app)
+    propertyrepo = PropertyRepo(connection)
+    propertyrepo.create(property)
+    
+    existing_properties = propertyrepo.all()
+    new_properties_list = []
+    for property in existing_properties:
+        new_properties_list.append(property.name)
+    return (", ").join(new_properties_list)
     
 # # Route to find a property
 # @app.route('/find', methods = ['GET'])

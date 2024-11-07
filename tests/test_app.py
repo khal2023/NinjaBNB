@@ -37,17 +37,17 @@ def test_http_get_existing_property_from_id(web_client, db_connection):
     db_connection.seed("seeds/makers_bnb_database.sql")
     response = web_client.get('/properties/1')
     assert response.status_code == 200 
-    assert response.data.decode('utf-8') == "Property(1,'The Ferns', '123 Wembley Downs', 'London', 'Haunted', 50, 1)"
+    assert response.data.decode('utf-8') == "Property(1, The Ferns, 123 Wembley Downs, London, Haunted, 50, 1)"
 
 def test_http_post_property(web_client, db_connection):
     db_connection.seed("seeds/makers_bnb_database.sql")
     post_response = web_client.post('/properties', data={
-        "property_name": "The Oaks",
-        "street_address": "143 Alan Lane",
-        "city": "Megalopolis",
-        "property_description": "Very large",
-        "price_per_night": 145,
-        "host_id": 2
+        "property_name":"The Oaks",
+        "street_address":"143 Alan Lane",
+        "city":"Megalopolis",
+        "property_description":"Very large",
+        "price_per_night":145,
+        "host_id":2
         })
     response = web_client.get('/properties')
     assert post_response.status_code == 200

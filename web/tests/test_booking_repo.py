@@ -54,14 +54,14 @@ def test_refuse_booking_if_end_before_start(db_connection):
     db_connection.seed("seeds/makers_bnb_database.sql")
     repo = BookingRepo(db_connection)
     with pytest.raises(Exception) as e:
-        repo.make_booking("KHam", "The Laurels", "2024-12-05", "2024-11-15")
+        repo.make_booking("KHam", "The Pines", "2024-12-05", "2024-11-15")
     assert str(e.value) == "Start date must be before end date"
 
 def test_refuse_booking_if_start_before_today(db_connection):
     db_connection.seed("seeds/makers_bnb_database.sql")
     repo = BookingRepo(db_connection)
     with pytest.raises(Exception) as e:
-        repo.make_booking("KHam", "The Laurels", "2024-08-15", "2024-11-15")
+        repo.make_booking("KHam", "The Pines", "2024-08-15", "2024-11-15")
     assert str(e.value) == "Start date must be from today"
 
 

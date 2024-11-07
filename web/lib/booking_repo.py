@@ -17,6 +17,9 @@ class BookingRepo:
         if self.user_owns_property(username, property_name):
             raise Exception("You can't book a property you own!")
         
+        if self.end_date_before_start_date(start_date, end_date):
+            raise Exception("Start date must be before end date")
+        
         user_rows = self._connection.execute('SELECT id FROM users WHERE username = %s', [username])
         property_rows = self._connection.execute('SELECT id FROM properties WHERE property_name = %s', [property_name])
         self._connection.execute("INSERT INTO bookings (property_id, user_id, b_start_date, b_end_date, b_status) VALUES (%s, %s, %s, %s, 'Unconfirmed')", [
@@ -51,8 +54,10 @@ class BookingRepo:
         user_id = self._connection.execute('SELECT id FROM users WHERE username = %s', [username])
         return property_owner_id[0]["host_id"] == user_id[0]["id"]
     
-    def end_date_before_start_date(start_date, end_date):
-        pass
+    def end_date_before_start_date(self, start_date, end_date):
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d")
+        return end < start
     
     def start_date_before_today(start_date):
         pass

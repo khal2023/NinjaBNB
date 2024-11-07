@@ -1,31 +1,8 @@
 import os
-import psycopg
 from flask import Flask, request, render_template, redirect, url_for
 from lib.database_connection import get_flask_database_connection
-# from markupsafe import escape
 from lib.property_repo import PropertyRepo
 from lib.users_repo import UsersRepo
-
-# Function that constructs an URL for the database
-
-# def get_database_url():
-#     if os.environ.get("APP_ENV") == "PRODUCTION":
-#         password = os.environ.get("POSTGRES_PASSWORD")
-#         hostname = os.environ.get("POSTGRES_HOSTNAME")
-#         return f"postgres://postgres:{password}@{hostname}:5432/postgres"
-#     else:
-#         return "postgres://localhost:5432/postgres"
-
-# # Function that sets up the database with the right table
-
-# def setup_database(url):
-#     connection = psycopg.connect(url)
-#     cursor = connection.cursor()
-#     cursor.execute("CREATE TABLE IF NOT EXISTS messages (message TEXT);")
-#     connection.commit()
-    
-# POSTGRES_URL = get_database_url()
-# setup_database(POSTGRES_URL)
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -63,35 +40,48 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        if valid_users(username, password):
-            return redirect(url_for('Booking'))
-        else:
-            return "Invalid username or password"
+        # if valid_users(username, password):
+        #     return redirect(url_for('Booking'))
+        # else:
+        #     return "Invalid username or password"
     
     return render_template('Login.html')
 
 
 # Route that registers user and redirects them to login page
-@app.route("/register", methods=['POST'])
+@app.route("/users", methods=['POST'])
 def register_new_user():
-    if request.method == 'POST':
-        first_name = request.form [first_name]
-        surname = request.form [surname]
-        username = request.form [username]
-        password = request.form [password]
+    first_name = request.form['first_name']
+    surname = request.form['surname']
+    username = request.form['username']
+    password = request.form['user_password']
+    connection = get_flask_database_connection(app)
+    usersrepo = UsersRepo(connection)
+    usersrepo.create(first_name, surname, username, password)
+    return "user added"
+        
 
-        if valid_users(first_name, surname, username, password):
-            return redirect(url_for('index'))
-        else:
-            return "Invalid username or password"
+        # if valid_users(first_name, surname, username, password):
+        #     return redirect(url_for('index'))
+        # else:
+        # return "Invalid username or password"
+
+
+ 
+
+# Route to list all properties
+@app.route('/properties', methods = ['GET'])
+def http_get_existing_properties():
+    connection = get_flask_database_connection(app)
+    propertyrepo = PropertyRepo(connection)
+    properties = propertyrepo.all()
+    properties_list = []
+    for property in properties:
+        properties_list.append(property.name)
+    return (", ").join(properties_list)
 
 
 
-
-# # Route to list all properties
-# @app.route('/all', methods = ['GET'])
-# def get_all_properties_from_users():
-#     return redirect(url_for(''))
     
 # # Route to find a property
 # @app.route('/find', methods = ['GET'])
@@ -120,11 +110,6 @@ def register_new_user():
 # They also start the server configured to use the test database
 # if started in test mode.
 if __name__ == '__main__':
-    
-    # if os.environ.get("APP_ENV") == "PRODUCTION":
-    #     app.run(port=5000, host='0.0.0.0')
-    
-    # else:
     app.run(
         debug=True,
         port=int(os.environ.get('PORT', 5001)),

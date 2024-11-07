@@ -8,8 +8,7 @@ from lib.property import Property
 # Create a new Flask app
 app = Flask(__name__)
 
-# == Your Routes Here ==
-
+# Route to get all users
 @app.route('/users', methods = ['GET'])
 def http_get_users():
     connection = get_flask_database_connection(app)
@@ -20,6 +19,7 @@ def http_get_users():
         usernames.append(user.username)
     return (", ").join(usernames)
 
+# Route to find a property by specific properties
 @app.route("/home")
 def get_home_with_available_properties():
     connection = get_flask_database_connection(app)
@@ -27,6 +27,7 @@ def get_home_with_available_properties():
     properties = repository.all()
     return render_template("index.html", properties = properties)
 
+# Route to show all properties booked
 @app.route('/bookings', methods = ['POST'])
 def booking():
     connection = get_flask_database_connection(app)
@@ -78,6 +79,7 @@ def http_get_existing_properties():
         properties_list.append(property.name)
     return (", ").join(properties_list)
 
+# Route to find a property by id
 @app.route('/properties/<int:id>', methods = ['GET'])
 def http_get_existing_property_from_id(id):
     connection = get_flask_database_connection(app)
@@ -85,6 +87,7 @@ def http_get_existing_property_from_id(id):
     return str(propertyrepo.find(id))
     return properties.name
 
+# Route to create a new property and post it in existing properties
 @app.route('/properties', methods = ['POST'])
 def http_post_property():
     
@@ -107,6 +110,8 @@ def http_post_property():
         new_properties_list.append(property.name)
     return (", ").join(new_properties_list)
     
+
+
 # # Route to find a property
 # @app.route('/find', methods = ['GET'])
 # def find_property_from_user():
@@ -122,9 +127,6 @@ def http_post_property():
 # @app.route('/delete', methods = ['GET'])
 # def delete_any_property():
 #     return redirect(url_for(''))
-
-
-
 
 # @app.route('/index', methods=['GET'])
 # def get_index():

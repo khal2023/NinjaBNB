@@ -1,7 +1,7 @@
 {
-    "name": "ninja-makersbnb-database",
+    "name": "ninja-makersbnb-db",
     "domain": false,
-    "hostname": "ninja-makersbnb-database",
+    "hostname": "ninja-makersbnb-db",
     "image": "postgres:12",
     "env": {
     "POSTGRES_PASSWORD": "@ninja-makersbnb-postgres-password"

@@ -13,6 +13,11 @@
     .calendar-day.today {
       border: 2px solid purple;
     }
+    .calendar-day.unavailable {
+      background-color: #e53e3e;
+      color: white;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -23,7 +28,7 @@
     </style>
   <div class="flex justify-center items-center h-screen">
     <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
-      <h2 class="text-2xl font-bold mb-4">Book Your Appointment</h2>
+      <h2 class="text-2xl font-bold mb-4">Select your dates to book your stay</h2>
       <div class="calendar">
         <div class="flex justify-between mb-2">
           <button id="prev-month" class="text-gray-500 hover:text-gray-700">&lt;</button>
@@ -41,8 +46,9 @@
         </div>
         <div id="calendar-days" class="grid grid-cols-7 gap-1 mt-2"></div>
       </div>
-      <div class="mt-4">
+      <div class="mt-4 flex justify-between">
         <button id="clear-selection" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md">Clear Selection</button>
+        <button id="check-availability" class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md">Check Availability</button>
       </div>
     </div>
   </div>
@@ -53,6 +59,20 @@
     const prevMonthButton = document.getElementById('prev-month');
     const nextMonthButton = document.getElementById('next-month');
     const clearSelectionButton = document.getElementById('clear-selection');
+    const checkAvailabilityButton = document.getElementById('check-availability');
+
+    // Replace this with your actual available dates
+    const availableDates = [
+      new Date(2023, 4, 1),
+      new Date(2023, 4, 5),
+      new Date(2023, 4, 10),
+      new Date(2023, 4, 15),
+      new Date(2023, 4, 20),
+      new Date(2023, 4, 25),
+      new Date(2023, 5, 1),
+      new Date(2023, 5, 5),
+      new Date(2023, 5, 10)
+    ];
 
     let currentDate = new Date();
     let selectedDates = [];
@@ -84,15 +104,21 @@
           dayElement.classList.add('today');
         }
 
+        if (!availableDates.some(date => date.getDate() === i && date.getMonth() === currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear())) {
+          dayElement.classList.add('unavailable');
+        }
+
         dayElement.addEventListener('click', () => {
-          const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
-          const index = selectedDates.findIndex(date => date.getTime() === selectedDate.getTime());
-          if (index === -1) {
-            selectedDates.push(selectedDate);
-          } else {
-            selectedDates.splice(index, 1);
+          if (!dayElement.classList.contains('unavailable')) {
+            const selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), i);
+            const index = selectedDates.findIndex(date => date.getTime() === selectedDate.getTime());
+            if (index === -1) {
+              selectedDates.push(selectedDate);
+            } else {
+              selectedDates.splice(index, 1);
+            }
+            renderCalendar();
           }
-          renderCalendar();
         });
 
         calendarDaysElement.appendChild(dayElement);
@@ -112,6 +138,21 @@
     clearSelectionButton.addEventListener('click', () => {
       selectedDates = [];
       renderCalendar();
+    });
+
+    checkAvailabilityButton.addEventListener('click', () => {
+      // Replace this with your own availability check logic
+      const unavailableDates = selectedDates.filter(date => !availableDates.some(availableDate =>
+        availableDate.getDate() === date.getDate() &&
+        availableDate.getMonth() === date.getMonth() &&
+        availableDate.getFullYear() === date.getFullYear()
+      ));
+
+      if (unavailableDates.length > 0) {
+        alert(`The following dates are unavailable: ${unavailableDates.map(date => date.toLocaleDateString()).join(', ')}`);
+      } else {
+        alert('All selected dates are available!');
+      }
     });
 
     renderCalendar();

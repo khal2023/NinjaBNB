@@ -59,15 +59,11 @@ def register_new_user():
     usersrepo = UsersRepo(connection)
     usersrepo.create(first_name, surname, username, password)
     return "user added"
-        
 
         # if valid_users(first_name, surname, username, password):
         #     return redirect(url_for('index'))
         # else:
         # return "Invalid username or password"
-
-
- 
 
 # Route to list all properties
 @app.route('/properties', methods = ['GET'])
@@ -80,9 +76,6 @@ def http_get_existing_properties():
         properties_list.append(property.name)
     return (", ").join(properties_list)
 
-
-
-    
 # # Route to find a property
 # @app.route('/find', methods = ['GET'])
 # def find_property_from_user():
@@ -98,8 +91,6 @@ def http_get_existing_properties():
 # @app.route('/delete', methods = ['GET'])
 # def delete_any_property():
 #     return redirect(url_for(''))
-
-
 
 
 # @app.route('/index', methods=['GET'])

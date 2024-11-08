@@ -25,8 +25,13 @@ class UsersRepo:
         return len(password) > 7 and any(char in "?!#%&$" for char in password)
     
     def create(self, first_name, surname, username, password):
-        if not self.username_in_db(username) and self.password_is_valid(password):
-            self._connection.execute('INSERT INTO users (first_name, surname, username, user_password) VALUES (%s, %s, %s, %s)', [
+        if self.username_in_db(username):
+            raise Exception ("Sorry, that username is taken!")
+        
+        if not self.password_is_valid(password):
+            raise Exception ("Sorry, your password must be 8 characters or longer and contain a special character!")
+        
+        self._connection.execute('INSERT INTO users (first_name, surname, username, user_password) VALUES (%s, %s, %s, %s)', [
                 first_name, surname, username, password])
     
     def validate_user(self, username, password):

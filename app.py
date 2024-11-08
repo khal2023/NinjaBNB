@@ -11,22 +11,6 @@ from lib.booking import Booking
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# Route to get all users
-@app.route('/users', methods = ['GET'])
-# def http_get_users():
-#     connection = get_flask_database_connection(app)
-#     usersrepo = UsersRepo(connection)
-#     users = usersrepo.list_all_users()
-#     usernames = []
-#     for user in users:
-#         usernames.append(user.username)
-#     return (", ").join(usernames)
-
-# Route to login
-# @app.route('/login', methods=['GET'])
-# def get_login_page():
-#     return render_template('login.html')
-
 
 @app.route('/ninjasunite')
 def get_landing():
@@ -63,18 +47,28 @@ def get_properties_on_home_page():
         username = session.get('username')
         return render_template('index.html', properties=properties, username=username)
     
-# @app.route('/secureproperties')
-# def protected():
-#     if not session.get('authenticated'):
-#         return "Forbidden"
-#     else:
-#         connection = get_flask_database_connection(app)
-#         propertyrepo = PropertyRepo(connection)
-#         properties = propertyrepo.all()
-#         username = session.get('username')
-#         return render_template('secureproperties.html', properties=properties, username=username)
-        
+@app.route('/register')
+def get_registration_page():
+    return render_template('register.html')
 
+@app.route('/register', methods=['POST'])
+def register_user():
+    connection = get_flask_database_connection(app)
+    user_repo = UsersRepo(connection)
+    first_name = request.form['fname']
+    last_name = request.form['lname']
+    username = request.form['uname']
+    password = request.form['psw']
+    error_message = None
+    try:
+        user_repo.create(first_name, last_name, username, password)
+        error_message = "Registration Successful! Please log in!"
+        return render_template("ninjas.html", error_message=error_message)
+    except Exception as e:
+        error_message = str(e)
+    return render_template("/register.html", error_message=error_message)
+
+    
 # Route to test user can be added
 @app.route("/users", methods=['POST'])
 def register_new_user():
@@ -86,15 +80,6 @@ def register_new_user():
     usersrepo = UsersRepo(connection)
     usersrepo.create(first_name, surname, username, password)
     return "user added"
-
-# # Route to home and list all properties
-# @app.route('/home')
-# def get_properties_on_home_page():
-#     connection = get_flask_database_connection(app)
-#     propertyrepo = PropertyRepo(connection)
-#     properties = propertyrepo.all()
-#     return render_template('index.html', properties=properties)
-
 
 # Route to find specific details about specific property
 @app.route("/home/<id>")

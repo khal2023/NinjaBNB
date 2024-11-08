@@ -18,7 +18,10 @@ class BookingRepo:
             raise Exception("You can't book a property you own!")
         
         if self.end_date_before_start_date(start_date, end_date):
-            raise Exception("Start date must be before end date")
+            raise Exception("Start date must be before end date!")
+        
+        if self.start_date_before_today(start_date):
+            raise Exception(f"The start date you selcted ({start_date}) has already passed!<br>Today's date is {datetime.today().date()}.")
         
         user_rows = self._connection.execute('SELECT id FROM users WHERE username = %s', [username])
         property_rows = self._connection.execute('SELECT id FROM properties WHERE property_name = %s', [property_name])
@@ -33,7 +36,6 @@ class BookingRepo:
         
 
 # VALIDITY CHECKS
-        
     def date_clash_found(self, property_name, start_date, end_date):
         booked_dates = self._connection.execute(
             '''SELECT generate_series(b_start_date, b_end_date, '1 day'::INTERVAL)::DATE AS DATE
@@ -59,7 +61,7 @@ class BookingRepo:
         end = datetime.strptime(end_date, "%Y-%m-%d")
         return end < start
     
-    def start_date_before_today(start_date):
+    def start_date_before_today(self, start_date):
         start = datetime.strptime(start_date, "%Y-%m-%d").date()
         return datetime.today().date() >= start
         

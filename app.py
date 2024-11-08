@@ -4,6 +4,8 @@ from lib.database_connection import get_flask_database_connection
 from lib.property_repo import PropertyRepo
 from lib.users_repo import UsersRepo
 from lib.property import Property
+from lib.booking_repo import BookingRepo
+from lib.booking import Booking
 
 # Create a new Flask app
 app = Flask(__name__)
@@ -47,6 +49,32 @@ def get_property_from_id(id):
     propertyrepo = PropertyRepo(connection)
     property = propertyrepo.find(id)
     return render_template('property.html', property=property)
+
+@app.route('/successfulbooking')
+def show_booking_success():
+    return render_template("successfulbooking.html")
+
+@app.route("/home/<id>", methods=['POST'])
+def add_booking(id):
+    connection = get_flask_database_connection(app)
+    property_repo = PropertyRepo(connection)
+    property = property_repo.find(id)
+    booking_repo = BookingRepo(connection)
+    user_repo = UsersRepo(connection)
+    username = request.form['username']
+    password = request.form['user_password']
+    start = request.form['start_date']
+    end = request.form['end_date']
+    error_message = None
+    try:
+        if user_repo.validate_user(username, password):
+            booking_repo.make_booking(username, property.name, start, end)
+            return redirect("/successfulbooking")
+        else:
+            error_message = "Invalid username or password"
+    except Exception as e:
+        error_message = str(e)
+    return render_template("property.html", property=property, error_message=error_message)
 
 # Route to show all properties booked
 @app.route('/bookings', methods = ['POST'])

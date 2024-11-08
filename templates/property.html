@@ -11,30 +11,37 @@
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-weight: 300;
         }
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>Property name: {{property.name}}</h1>
     <h3>Location: {{property.city}}</h3>
     <h3>Description: {{property.property_description}}</h3>
-    <p>
-         
-    </p>
+       {% if error_message %}
+       <p class="error-message">{{error_message|safe}}</p>
+       {% endif %} 
     <p>Would you like to book?</p>
-    <p>
-        <input type="text" placeholder ="Username" name = "username">
+    <form method="POST" action="/home/{{property.id}}">
+        <p>
+            <input type="text" placeholder ="Username" name = "username">
+        </p>
+        <p>    
+            <input type="text" placeholder ="Password" name = "user_password">
+        </p>
+        <p>
+            <input type="text" placeholder ="Start date: 'YYYY-MM-DD'" name = "start_date">
+        </p>
+        <p>
+            <input type="text" placeholder ="End date: 'YYYY-MM-DD'" name = "end_date">
+        </p>
+        <p>
+            <input type="submit" value="Book!">
     </p>
-    <p>    
-        <input type="text" placeholder ="Password" name = "user_password">
-    </p>
-    <p>
-        <input type="text" placeholder ="Start date: 'YYYY-MM-DD'" name = "start_date">
-    </p>
-    <p>
-        <input type="text" placeholder ="End date: 'YYYY-MM-DD'" name = "end_date">
-    </p>
-
-
+    </form>
 
     <p><a href="/home">Return to properties overview</a></p>
 </body>

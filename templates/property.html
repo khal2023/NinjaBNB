@@ -7,7 +7,8 @@
     <style>
         body {
             text-align: left;
-            background-color: rgb(245, 245, 245);
+            background-color: rgb(0, 0, 0);
+            color: white;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-weight: 300;
         }
@@ -18,20 +19,14 @@
     </style>
 </head>
 <body>
-    <h1>Property name: {{property.name}}</h1>
+    <h1>Ninja Hideout: {{property.name}}</h1>
     <h3>Location: {{property.city}}</h3>
     <h3>Description: {{property.property_description}}</h3>
        {% if error_message %}
        <p class="error-message">{{error_message|safe}}</p>
        {% endif %} 
-    <p>Would you like to book?</p>
-    <form method="POST" action="/home/{{property.id}}">
-        <p>
-            <input type="text" placeholder ="Username" name = "username">
-        </p>
-        <p>    
-            <input type="text" placeholder ="Password" name = "user_password">
-        </p>
+    <p>When would you like to book, {{username}}?</p>
+    <form action="/home/{{property.id}}" method="POST" >
         <p>
             <input type="text" placeholder ="Start date: 'YYYY-MM-DD'" name = "start_date">
         </p>

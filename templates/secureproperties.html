@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome Ninja!</title>
+</head>
+<body>
+    <h2> Welcome Ninja {{username}}!</h2>
+
+    <h3>Top of class spaces, discrete bookings.</h3>
+    <p>Please click one of the following to book your next vacation.</p>
+
+    <div text-align: center>
+        {% for property in properties %}
+        <p>
+            {{property.city}}: <a href="home/{{property.id}}">{{property.name}}</a>
+        </p>
+        <p>
+            {{property.description}}
+        </p>
+        {% endfor %}
+    </div>
+    
+</body>
+</html>

@@ -11,17 +11,17 @@ class BookingRepo:
 
     def make_booking(self, username, property_name, start_date, end_date):
     
-        if self.date_clash_found(property_name, start_date, end_date):
-            raise Exception(f"Sorry, {property_name} are booked during those dates!")
-        
         if self.user_owns_property(username, property_name):
             raise Exception("You can't book a property you own!")
+        
+        if self.start_date_before_today(start_date):
+            raise Exception(f"The start date you selcted ({start_date}) has already passed!<br>Today's date is {datetime.today().date()}.")
         
         if self.end_date_before_start_date(start_date, end_date):
             raise Exception("Start date must be before end date!")
         
-        if self.start_date_before_today(start_date):
-            raise Exception(f"The start date you selcted ({start_date}) has already passed!<br>Today's date is {datetime.today().date()}.")
+        if self.date_clash_found(property_name, start_date, end_date):
+            raise Exception(f"Sorry, {property_name} are booked during those dates!")
         
         user_rows = self._connection.execute('SELECT id FROM users WHERE username = %s', [username])
         property_rows = self._connection.execute('SELECT id FROM properties WHERE property_name = %s', [property_name])

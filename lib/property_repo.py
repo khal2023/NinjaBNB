@@ -16,7 +16,6 @@ class PropertyRepo:
         return properties
 
     def find(self, property_id):
-        
         rows = self._connection.execute(
             'SELECT * from properties WHERE id = %s', [property_id])
         row = rows[0]

@@ -19,13 +19,34 @@ def http_get_users():
         usernames.append(user.username)
     return (", ").join(usernames)
 
-# Route to find a property by specific properties
-@app.route("/home")
-def get_home_with_available_properties():
+# Route to test user can be added
+@app.route("/users", methods=['POST'])
+def register_new_user():
+    first_name = request.form['first_name']
+    surname = request.form['surname']
+    username = request.form['username']
+    password = request.form['user_password']
     connection = get_flask_database_connection(app)
-    repository = PropertyRepo(connection)
-    properties = repository.all()
-    return render_template("index.html", properties = properties)
+    usersrepo = UsersRepo(connection)
+    usersrepo.create(first_name, surname, username, password)
+    return "user added"
+
+# Route to home and list all properties
+@app.route('/home')
+def get_properties_on_home_page():
+    connection = get_flask_database_connection(app)
+    propertyrepo = PropertyRepo(connection)
+    properties = propertyrepo.all()
+    return render_template('index.html', properties=properties)
+
+
+# Route to find specific details about specific property
+@app.route("/home/<id>")
+def get_property_from_id(id):
+    connection = get_flask_database_connection(app)
+    propertyrepo = PropertyRepo(connection)
+    property = propertyrepo.find(id)
+    return render_template('property.html', property=property)
 
 # Route to show all properties booked
 @app.route('/bookings', methods = ['POST'])
@@ -50,20 +71,7 @@ def login():
 
 
 # Route that registers user and redirects them to login page
-@app.route("/users", methods=['POST'])
-def register_new_user():
-    first_name = request.form['first_name']
-    surname = request.form['surname']
-    username = request.form['username']
-    password = request.form['user_password']
-    connection = get_flask_database_connection(app)
-    usersrepo = UsersRepo(connection)
-    usersrepo.create(first_name, surname, username, password)
-    return "user added"
-<<<<<<< HEAD
-=======
-        
->>>>>>> app-tests
+
 
         # if valid_users(first_name, surname, username, password):
         #     return redirect(url_for('index'))
@@ -81,76 +89,8 @@ def http_get_existing_properties():
         properties_list.append(property.name)
     return (", ").join(properties_list)
 
-<<<<<<< HEAD
-=======
-# Route to list all properties
-@app.route('/properties', methods = ['GET'])
-def http_get_existing_properties():
-    connection = get_flask_database_connection(app)
-    propertyrepo = PropertyRepo(connection)
-    properties = propertyrepo.all()
-    properties_list = []
-    for property in properties:
-        properties_list.append(property.name)
-    return (", ").join(properties_list)
+# HTML Routes
 
-# Route to find a property by id
-@app.route('/properties/<int:id>', methods = ['GET'])
-def http_get_existing_property_from_id(id):
-    connection = get_flask_database_connection(app)
-    propertyrepo = PropertyRepo(connection)
-    return str(propertyrepo.find(id))
-    return properties.name
-
-# Route to create a new property and post it in existing properties
-@app.route('/properties', methods = ['POST'])
-def http_post_property():
-    
-    property_name = request.form['property_name']
-    street_address = request.form['street_address']
-    city = request.form['city']
-    property_description = request.form['property_description']
-    price_per_night = request.form['price_per_night']
-    host_id = request.form['host_id']
-    
-    property = Property(None, property_name, street_address, city, property_description, price_per_night, host_id)
-    
-    connection = get_flask_database_connection(app)
-    propertyrepo = PropertyRepo(connection)
-    propertyrepo.create(property)
-    
-    existing_properties = propertyrepo.all()
-    new_properties_list = []
-    for property in existing_properties:
-        new_properties_list.append(property.name)
-    return (", ").join(new_properties_list)
-    
-
-
->>>>>>> app-tests
-# # Route to find a property
-# @app.route('/find', methods = ['GET'])
-# def find_property_from_user():
-#     return redirect(url_for(''))
-
-# # Route to create a new property
-# @app.route('/create', methods = ['POST'])
-# def create_new_property_for_a_user():
-#     list_properties = request.form
-#     return redirect(url_for(''))
-    
-# # Route to remove a property
-# @app.route('/delete', methods = ['GET'])
-# def delete_any_property():
-#     return redirect(url_for(''))
-
-<<<<<<< HEAD
-
-=======
->>>>>>> app-tests
-# @app.route('/index', methods=['GET'])
-# def get_index():
-#     return render_template('index.html')
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database

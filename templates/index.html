@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Ninja BnB</title>
     <style>
         body {
             text-align: center;
-            background-color: lightgray;
-            font-family: 'papyrus', cursive, sans-serif;
+            background-color: rgb(245, 245, 245);
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: 300;
         }
         .image-container {
             display: flex;
@@ -22,9 +23,20 @@
     </style>
 </head>
 <body>
-    <h2>Welcome to Ninja BnB</h2>
-    <p>Welcome to Ninja BnB, your one stop shop for all your getaway needs.</p>
+    <h1>Welcome to Ninja BnB</h1>
+    <h3>Top of class spaces, discrete bookings.</h3>
     <p>Please click one of the following to book your next vacation.</p>
+
+    <div text-align: center>
+        {% for property in properties %}
+        <p>
+            {{property.city}}: <a href="home/{{property.id}}">{{property.name}}</a>
+        </p>
+        <p>
+            {{property.description}}
+        </p>
+        {% endfor %}
+    </div>
 
     <div class="image-container">
         <a href="Login.html">
